@@ -23,7 +23,7 @@
     <ClInclude Include="Direction.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerSide.h">
+    <ClInclude Include="FieldSide.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
