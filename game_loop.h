@@ -52,7 +52,7 @@ void reset_all(int& player_y, int& enemy_y,
 
 void print_winner(int left_score, int win_score) {
 	std::cout << "ѕобедил игрок "
-		<< left_score >= win_score ? "слева" : "справа";
+		<< (left_score >= win_score ? "слева" : "справа");
 }
 
 // git add .
