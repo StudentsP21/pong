@@ -130,7 +130,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="check_ball.hpp" />
     <ClInclude Include="Direction.h" />
+    <ClInclude Include="field.hpp" />
     <ClInclude Include="FieldSide.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
