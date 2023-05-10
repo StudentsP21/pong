@@ -59,6 +59,9 @@ void game_loop() {
 
 	uint64_t frames_count = 0;
 
+	uint16_t left_score = 0;
+	uint16_t right_score = 0;
+
 	constexpr int win_score = 3;
 
 	constexpr int platform_turns_per_second = 2;
