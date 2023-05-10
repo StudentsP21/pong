@@ -55,9 +55,6 @@ void print_winner(int left_score, int win_score) {
 		<< (left_score >= win_score ? "слева" : "справа");
 }
 
-// git add .
-// git commit
-
 void game_loop() {
 	int player_y, enemy_y;
 
