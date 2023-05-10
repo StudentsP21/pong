@@ -15,6 +15,7 @@
 #include <cstdint>
 #include <chrono>
 #include <thread>
+#include <iostream>
 
 using namespace std::chrono_literals;
 
@@ -47,6 +48,11 @@ void reset_all(int& player_y, int& enemy_y,
 	ball_y = field_height / 2;
 	ball_direction = rand() % 2 == 0 ?
 		Direction::LEFT : Direction::RIGHT;
+}
+
+void print_winner(int left_score, int win_score) {
+	std::cout << "Победил игрок "
+		<< (left_score >= win_score ? "слева" : "справа");
 }
 
 void game_loop() {
@@ -113,10 +119,5 @@ void game_loop() {
 		std::this_thread::sleep_for(1000/FPS*1ms);
 	}
 
-	if (left_score == win_score) {
-		std::cout << "Победил игрок слева";
-	}
-	else {
-		std::cout << "Победил игрок справа"
-	}
+	print_winner(left_score, win_score);
 }

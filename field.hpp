@@ -2,27 +2,37 @@
 
 using namespace std;
 
-enum Direction {
-    left,left_up,left_down,up,right,right_up,right_down,down
-};
+void print_field(size_t width, size_t length) {
 
-void field(int x_ball,int x_bot,int x_player,int y_ball,int y_bot,int y_player,size_t width,size_t length) {
-    
-    
+    for (size_t i = 0; i < width; i++)
+    {
+        if (i == 0 || i == width - 1)
+        {
+            for (size_t j = 0; j < length; j++)
+            {
+                cout << '*';
+            }
+        }
+        else
+        {
+            for (size_t j = 0; j < length; j++)
+            {
+                if (j == 0 || j == length - 1)
+                    cout << '*';
+                else
+                    cout << " ";
+            }
+            cout << '\n';
+        }
+    }
 }
 
-void print_field(size_t width,size_t length){
-    for (size_t i=0;i<length;i++) {
-        cout<<"*";
-    }
-    for (size_t i=0;i<length;i++) {
-        for (size_t j=0;j<width;j++)
-            if (i=0 || i=length-1) {
-                cout<<'*'
+void print_ball(size_t width, size_t length, size_t ball_y, size_t ball_x) {
+    for (size_t y = 0; y < width; y++) {
+        for (size_t x = 0; x < length; x++) {
+            if (y == ball_y && x == ball_x) {
+                cout << 'o';
             }
-        cout<<" ";
-    }
-    for (size_t i=0;i<length;i++) {
-        cout<<"*";
+        }
     }
 }
