@@ -1,11 +1,20 @@
-void ai_move(int& ball_x, int& ball_y, size_t racket_y, size_t speed_ball, const mas_racket)
-{
-  if(ball_x <= 30){
-    if(ball_y>(field_height/2)){
-      racket_movement(x,y,racket);//движение ракетки (under)
+#pragma once
+
+void bot_move(
+    const int ball_x, const int ball_y, 
+    int& bot_y,
+    const int field_height
+) {
+    if (ball_x < 30) {
+        return;
     }
-    if(ball_y<(field_height/2)){
-      racket_movement(x,y,racket);//движение ракетки (up)      }
+
+    if (ball_y > bot_y){
+        bot_y--;
+        return;
     }
-  }
+
+    if (ball_y < bot_y) {
+        bot_y++;
+    }
 }

@@ -1,38 +1,69 @@
+#pragma once
+
 #include <iostream>
+#include <cmath>
+#include <sstream>
 
 using namespace std;
 
-void print_field(size_t width, size_t length) {
-
-    for (size_t i = 0; i < width; i++)
-    {
-        if (i == 0 || i == width - 1)
-        {
-            for (size_t j = 0; j < length; j++)
-            {
-                cout << '*';
-            }
-        }
-        else
-        {
-            for (size_t j = 0; j < length; j++)
-            {
-                if (j == 0 || j == length - 1)
-                    cout << '*';
-                else
-                    cout << " ";
-            }
-            cout << '\n';
-        }
-    }
+void clear() {
+    system("cls");
 }
 
-void print_ball(size_t width, size_t length, size_t ball_y, size_t ball_x) {
-    for (size_t y = 0; y < width; y++) {
-        for (size_t x = 0; x < length; x++) {
-            if (y == ball_y && x == ball_x) {
-                cout << 'o';
-            }
-        }
+bool is_platform_position(uint16_t platform_size, 
+    int platform_y, int y
+) {
+    return abs(platform_y - y) <= platform_size / 2;
+}
+
+void print_field(
+    int height, int width,
+    int ball_y, int ball_x,
+    uint16_t platform_size,
+    int left_player_y, int right_player_y
+) {
+    stringstream out;
+
+    for (int x = 0; x < width; x++)
+    {
+        out << '*';
     }
+    out << '\n';
+    for (int y = 0; y < height; y++)
+    {
+        if (is_platform_position(platform_size, left_player_y, y))
+            out << '#';
+        else
+            out << ' ';
+
+        for (int x = 1; x < width-1; x++)
+        {
+            if (y == ball_y && x == ball_x) {
+                out << 'o';
+                continue;
+            }
+
+            if (x == width / 2 + 1) {
+                out << '|';
+                continue;
+            }
+
+            out << ' ';
+        }
+
+        if (is_platform_position(platform_size, right_player_y, y))
+            out << '#';
+        else
+            out << ' ';
+        out << '\n';
+    }
+
+    for (int x = 0; x < width; x++)
+    {
+        out << '*';
+    }
+
+    clear();
+
+    std::cout << out.rdbuf();
 }

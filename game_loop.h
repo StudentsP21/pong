@@ -1,17 +1,5 @@
 #pragma once
 
-//счЄтчик повторов цикла игры
-
-//сделать счЄтчик времени проведЄнный в игре (без нажатой паузы)
-
-//сделать паузу игры и счЄтчик времени 
-
-//при попадании м€ча 1 игроку добавл€ть 1 балл 2 игроку и наоборот
-
-//при попадании возвращ€ть м€чь на центр пол€ 
-
-//при набирании 3 очков у 1 или 2 игрока останавливать игру
-
 #include <cstdint>
 #include <chrono>
 #include <thread>
@@ -20,13 +8,18 @@
 using namespace std::chrono_literals;
 
 #include "check_ball.hpp"
+#include "bot_move.hpp"
+#include "ball_move.hpp"
+#include "field.hpp"
+#include "handle_player_control.hpp"
 #include "FieldSide.h"
 #include "Direction.h"
 
-constexpr uint64_t FPS = 5;
+
+constexpr uint64_t FPS = 30;
 
 constexpr int field_height = 30;
-constexpr int field_width = 61;
+constexpr int field_width = 91;
 
 bool is_time_for_turn(
 	uint64_t frames_count,
@@ -70,8 +63,10 @@ void game_loop() {
 
 	constexpr int win_score = 3;
 
-	constexpr int platform_turns_per_second = 2;
-	constexpr int ball_turns_per_second = 5;
+	constexpr int platform_turns_per_second = 10;
+	constexpr int ball_turns_per_second = 30;
+
+	constexpr uint16_t platform_size = 3;
 
 	for (;;) {
 		if (is_time_for_turn(
@@ -80,7 +75,7 @@ void game_loop() {
 			platform_turns_per_second
 		)) {
 			handle_player_control(player_y);
-			bot_move(enemy_y, ball_y);
+			bot_move(ball_x, ball_y, enemy_y, field_height);
 		}
 
 		if (is_time_for_turn(
@@ -88,17 +83,17 @@ void game_loop() {
 			FPS,
 			ball_turns_per_second
 		)) {
-			ball_move(ball_y, ball_x, ball_direction);
+			ball_move(field_height, ball_y, ball_x, ball_direction);
 			if (check_hit(field_width, ball_x)) {
 				FieldSide side = ball_side(field_width, ball_x);
 
 				reset_all(player_y, enemy_y, ball_x, ball_y, ball_direction);
 
 				switch (side) {
-				case LEFT:
+				case FieldSide::LEFT:
 					++right_score;
 					break;
-				case RIGHT:
+				case FieldSide::RIGHT:
 					++left_score;
 					break;
 				}
@@ -109,9 +104,9 @@ void game_loop() {
 		}
 
 		print_field(
-			player_y, enemy_y, 
-			ball_x, ball_y, ball_direction,
-			field_height, field_width
+			field_height, field_width,
+			ball_y, ball_x, platform_size,
+			player_y, enemy_y
 		);
 
 		++frames_count;
@@ -119,5 +114,6 @@ void game_loop() {
 		std::this_thread::sleep_for(1000/FPS*1ms);
 	}
 
+	clear();
 	print_winner(left_score, win_score);
 }

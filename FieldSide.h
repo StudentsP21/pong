@@ -1,6 +1,6 @@
 #pragma once
 
-enum FieldSide {
+enum class FieldSide {
 	LEFT,
 	RIGHT
 };
