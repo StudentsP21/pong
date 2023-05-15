@@ -16,17 +16,17 @@ using namespace std::chrono_literals;
 #include "Direction.h"
 
 
-constexpr uint64_t FPS = 30;
+constexpr uint64_t FPS = 15;
 
 constexpr int field_height = 30;
 constexpr int field_width = 91;
 
 bool is_time_for_turn(
 	uint64_t frames_count,
-	uint64_t fps,
-	uint64_t turns_per_second
+	uint64_t frame_rate,
+	float speed_percent
 ) {
-	if (frames_count % (fps / turns_per_second) == 0) {
+	if (frames_count % (uint64_t)(frame_rate * speed_percent) == 0) {
 		return true;
 	}
 	return false;
@@ -63,16 +63,17 @@ void game_loop() {
 
 	constexpr int win_score = 3;
 
-	constexpr int platform_turns_per_second = 10;
-	constexpr int ball_turns_per_second = 30;
+	constexpr uint64_t frame_rate = 1;
+	constexpr float platform_speed = 1.1;
+	constexpr float ball_speed = 1;
 
 	constexpr uint16_t platform_size = 3;
 
 	for (;;) {
 		if (is_time_for_turn(
 			frames_count, 
-			FPS,
-			platform_turns_per_second
+			frame_rate,
+			platform_speed
 		)) {
 			handle_player_control(player_y);
 			bot_move(ball_x, ball_y, enemy_y, field_height);
@@ -80,10 +81,14 @@ void game_loop() {
 
 		if (is_time_for_turn(
 			frames_count,
-			FPS,
-			ball_turns_per_second
+			frame_rate,
+			ball_speed
 		)) {
-			ball_move(field_height, ball_y, ball_x, ball_direction);
+			ball_move(
+				field_height, field_width,
+				ball_y, ball_x, ball_direction,
+				player_y , enemy_y, platform_size
+			);
 			if (check_hit(field_width, ball_x)) {
 				FieldSide side = ball_side(field_width, ball_x);
 
@@ -111,7 +116,6 @@ void game_loop() {
 
 		++frames_count;
 
-		std::this_thread::sleep_for(1000/FPS*1ms);
 	}
 
 	clear();

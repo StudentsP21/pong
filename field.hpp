@@ -1,19 +1,14 @@
 #pragma once
 
 #include <iostream>
-#include <cmath>
 #include <sstream>
+
+#include "utility.h"
 
 using namespace std;
 
 void clear() {
     system("cls");
-}
-
-bool is_platform_position(uint16_t platform_size, 
-    int platform_y, int y
-) {
-    return abs(platform_y - y) <= platform_size / 2;
 }
 
 void print_field(
