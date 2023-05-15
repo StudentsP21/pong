@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include <cstdint>
@@ -49,12 +50,14 @@ void print_winner(int left_score, int win_score) {
 }
 
 void game_loop() {
-	int player_y, enemy_y;
+	setlocale(LC_ALL, "Russian");
+
+	int left_platform_y, right_platform_y;
 
 	int ball_x, ball_y;
 	Direction ball_direction;
 
-	reset_all(player_y, enemy_y, ball_x, ball_y, ball_direction);
+	reset_all(left_platform_y, right_platform_y, ball_x, ball_y, ball_direction);
 
 	uint64_t frames_count = 0;
 
@@ -68,6 +71,18 @@ void game_loop() {
 	constexpr float ball_speed = 1;
 
 	constexpr uint16_t platform_size = 3;
+	
+	FieldSide player_side = FieldSide::LEFT;
+	
+	{
+		int input;
+		std::cout << "выберите сторону: Левая - 1 ; Правая - 2\n";
+		std::cin >> input;
+		switch (input) {
+		case 2:
+			player_side = FieldSide::RIGHT;
+		}
+	}
 
 	for (;;) {
 		if (is_time_for_turn(
@@ -75,8 +90,8 @@ void game_loop() {
 			frame_rate,
 			platform_speed
 		)) {
-			handle_player_control(player_y);
-			bot_move(ball_x, ball_y, enemy_y, field_height);
+			handle_player_control(player_side == FieldSide::LEFT ? left_platform_y : right_platform_y);
+			bot_move(ball_x, ball_y, player_side == FieldSide::RIGHT ? left_platform_y : right_platform_y, field_height);
 		}
 
 		if (is_time_for_turn(
@@ -87,12 +102,12 @@ void game_loop() {
 			ball_move(
 				field_height, field_width,
 				ball_y, ball_x, ball_direction,
-				player_y , enemy_y, platform_size
+				left_platform_y , right_platform_y, platform_size
 			);
 			if (check_hit(field_width, ball_x)) {
 				FieldSide side = ball_side(field_width, ball_x);
 
-				reset_all(player_y, enemy_y, ball_x, ball_y, ball_direction);
+				reset_all(left_platform_y, right_platform_y, ball_x, ball_y, ball_direction);
 
 				switch (side) {
 				case FieldSide::LEFT:
@@ -111,7 +126,7 @@ void game_loop() {
 		print_field(
 			field_height, field_width,
 			ball_y, ball_x, platform_size,
-			player_y, enemy_y
+			left_platform_y, right_platform_y
 		);
 
 		++frames_count;
