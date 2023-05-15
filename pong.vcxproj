@@ -136,6 +136,7 @@
     <ClInclude Include="Direction.h" />
     <ClInclude Include="field.hpp" />
     <ClInclude Include="FieldSide.h" />
+    <ClInclude Include="game_loop.h" />
     <ClInclude Include="handle_player_control.hpp" />
     <ClInclude Include="utility.h" />
   </ItemGroup>
